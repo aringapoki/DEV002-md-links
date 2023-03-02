@@ -1,10 +1,10 @@
-const mdLinks = require('../');
+const { mdLinks } = require('../index.js');
 
 
 describe('mdLinks', () => {
-
-  it('should...', () => {
-    console.log('FIX ME!');
-  });
+ 
+  it('should return Promise', ()=> {
+    expect(mdLinks()).toBe(Promise)
+  })
 
 });
