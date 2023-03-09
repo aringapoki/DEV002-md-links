@@ -1,0 +1,39 @@
+const path = require('path')
+const fs = require('fs')
+
+// const fileRoute = path.resolve('./files/first-file.md')
+// console.log('file route: ', fileRoute)
+
+const readFile = (entryPath) => fs.readFileSync(entryPath, 'utf8', (err, data) => {
+    if (err) throw err;
+    console.log('contenido archivo readFile: ', data)
+    return data
+})
+
+// const gettingLinks = (entryPath) => {
+//     readFile(entryPath)
+//         .then((data) => {
+//             const regExp = /\[([\w\s\d]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#]+[a-zA-Z0-9!-_$]+)\)/gi;
+//             const regExpMatch = regExp.exec(data)
+//             console.log('regExp Match: ', regExpMatch)
+//         })
+//         .catch(err) 
+//     // console.log('expresión regular: ', typeof regExp);
+//     // console.log('regExp Match: ', regExpMatch)
+//    // console.log('md content: ', mdContent)
+// }
+
+// console.log('getting links: ', gettingLinks(fileRoute))
+
+const regExp = /\[([\w\s\d]+)\]\(((?:\/|https?:\/\/)[\w\d./?=#]+[a-zA-Z0-9!-_$]+)\)/gi;
+const file = path.resolve('./files/first-file.md')
+const content = fs.readFileSync(file)
+const getLinks = regExp.exec(content);
+if (getLinks !== null){
+    const arrayContent = [];
+    getLinks.forEach(element => {
+        arrayContent.push(getLinks[0])
+        console.log(arrayContent)
+    });
+
+}

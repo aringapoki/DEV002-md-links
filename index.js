@@ -1,5 +1,16 @@
+const { pathValidate, isAnAbsolutePath, pathResolve, isDirectory, isFile, readDir, getExtFile, readFile } = require("./functions/utils");
+
 const mdLinks = (entryPath, options) => {  
   //crear promesa que retorna la función mdLinks
+  const isAValidPath = pathValidate(entryPath);
+  const isAbsolute = isAnAbsolutePath(entryPath);
+  const relativeToAbs = pathResolve(entryPath);
+  const isADirectory = isDirectory(entryPath);
+  const readDirectory = readDir(entryPath)
+  const isAFile = isFile(entryPath);
+  const isMd = getExtFile(entryPath);
+  const readMdFile = readFile(entryPath);  
+  
   return new Promise((resolve, reject)=>{    
     //identificar si la ruta existe
     //si no existe la ruta, rechaza la promesa
@@ -8,7 +19,7 @@ const mdLinks = (entryPath, options) => {
   })
 }
 
-const testMdLinks = mdLinks('C:\Users\Usuario\Desktop\Laboratoria\DEV002-md-links\files\first-file.md');
+const testMdLinks = mdLinks('./DEV002-md-links/files/first-file.md');
 testMdLinks.then((result)=>{console.log(result)}).catch((error)=>{console.log(error)});
 
 module.exports = {
