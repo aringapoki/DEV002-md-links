@@ -32,20 +32,33 @@ const content = fs.readFileSync(file, 'utf8').toString()
 // console.log({content})
 const getLinks = content.match(regExp);
 const arrayContent = [];
+const linksArray = []
 
 if (getLinks !== null){        
     getLinks.forEach(element => {
-        //console.log({element})
-        // const links = regExp.exec(element)
-        // console.log('links: ', links)       
-        arrayContent.push(element)        
-        // return arrayContent
-        
+        const links = element.split(']')
+        // links = regExp.exec(element)
+        // const urls = links[0]        
+        linksArray.push({
+            href: links[1],
+            text: links[0]
+        })
+        //console.log(links)
+        // return arrayContent        
     });
-    // console.log('getLinks: ', getLinks)
-     console.log('array content:', arrayContent)     
+    // console.log('array content:', arrayContent)
+    console.log(linksArray)  
     
 };
 
+// const markdownText = 'Este es un [enlace](https://www.ejemplo.com) en un archivo Markdown.';
 
+// const regex = /\[(.*?)\]\((.*?)\)/g;
 
+// let match;
+// while (match = regex.exec(markdownText)) {
+//   const linkText = match[1];
+//   const linkUrl = match[2];
+  
+//   console.log(`Encontrado enlace: ${linkText} -> ${linkUrl}`);
+// }
