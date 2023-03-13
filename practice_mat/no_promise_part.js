@@ -20,6 +20,12 @@ const mdLinks = (entryPath, options) => {
     if(isADirectory(absPath) == true){
         const directoryFiles = readDirectory(absPath)
     }
+    else if(isAFile(absPath) == true){
+        const mdFile = readMdFile(absPath)
+    }
+    else{
+        console.log('error')
+    }
   }
   
   return new Promise((resolve, reject)=>{    
