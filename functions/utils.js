@@ -1,6 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 
+//acá debería desarrollar las funciones, manejar condicionales y errores
+
 //función para validar que existe el path, devuelve true o false
 const pathValidate = (entryPath) => fs.existsSync(entryPath)
 //console.log('pathValidate: ', pathValidate('./files'))
@@ -12,7 +14,13 @@ const isAnAbsolutePath = (entryPath) => path.isAbsolute(entryPath);
 //función para hacer absoluta una ruta relativa
 const pathResolve = (entryPath) => path.resolve(entryPath)
 //console.log('pathResolve: ', pathResolve('./files'))
-
+const getAbsolutePath = (entryPath) => {
+    if(isAnAbsolutePath(entryPath) == true){
+        return entryPath
+    } else {
+        return pathResolve(entryPath)
+    }
+}
 //función para saber si es un directorio, devuelve true o false
 const isDirectory = (entryPath) => {
     const stats = fs.statSync(entryPath);
@@ -31,7 +39,7 @@ const isFile = (entryPath) => {
 const getExtFile = (entryPath) => path.extname(entryPath)
 //console.log('getExtFile: ', getExtFile('./files/first-file.md'))
 
-//función para leer un directorio
+//función para leer un directorio, devuelve un array de archivos
 const readDir = (entryPath) => fs.readdirSync(entryPath, 'utf8')
 //console.log('readDir: ', readDir('./files') )
 
@@ -45,6 +53,7 @@ const readFile = (entryPath) => fs.readFile(entryPath, 'utf8', (err, data) => {
 module.exports = {
     pathValidate,
     isAnAbsolutePath,
+    getAbsolutePath,
     pathResolve,
     isDirectory,
     isFile,
