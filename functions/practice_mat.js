@@ -37,6 +37,7 @@ const linksArray = []
 if (getLinks !== null){        
     getLinks.forEach(element => {
         const links = element.split(']')
+        //console.log(element)
         // links = regExp.exec(element)
         // const urls = links[0]        
         linksArray.push({

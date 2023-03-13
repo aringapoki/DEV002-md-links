@@ -1,8 +1,15 @@
 const { pathValidate, isAnAbsolutePath, pathResolve, isDirectory, isFile, readDir, getExtFile, readFile } = require("./functions/utils");
 
+const entryPath = ('/files') 
 const mdLinks = (entryPath, options) => {  
   //crear promesa que retorna la función mdLinks
-  const isAValidPath = pathValidate(entryPath);
+  const pathExists = pathValidate(entryPath);
+  if(pathExists == false){
+    return ('not a valid path')
+  }
+  else{
+    console.log('else')
+  }
   const isAbsolute = isAnAbsolutePath(entryPath);
   const relativeToAbs = pathResolve(entryPath);
   const isADirectory = isDirectory(entryPath);
