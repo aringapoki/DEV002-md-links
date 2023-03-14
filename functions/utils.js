@@ -43,12 +43,34 @@ const getExtFile = (entryPath) => path.extname(entryPath)
 const readDir = (entryPath) => fs.readdirSync(entryPath, 'utf8')
 //console.log('readDir: ', readDir('./files') )
 
-//función para leer el contenido del archivo
-const readFile = (entryPath) => fs.readFile(entryPath, 'utf8', (err, data) => {
-    if(err) throw err;
-//    console.log('contenido archivo readFile: ', data)
-})
-//console.log('readFile: ', readFile('./files/first-file.md'), ' por qué devuelve undefined?')
+const getFiles = (entryPath) => {
+    if (pathValidate(entryPath) == false) {
+        return console.log('not a valid path')
+    } else {
+        const absPath = getAbsolutePath(entryPath);
+        const arrayFiles = []
+
+        if (isDirectory(absPath) == true) {            
+            arrayFiles.push(readDir(absPath))
+        }
+        else if (isFile(absPath) == true) {
+            if(getExtFile(absPath) === '.md')
+            arrayFiles.push(path.basename(absPath));
+        }
+        else {
+            return console.log('error')
+        }
+        return arrayFiles
+    }
+}
+
+
+// función para leer el contenido del archivo
+//const readFile = (entryPath) => fs.readFile(entryPath, 'utf8', (err, data) => {
+//     if(err) throw err;
+// //     console.log('contenido archivo readFile: ', data)
+// })
+//console.log('readFile: ', readFile('./files/first-file.md'));
 
 module.exports = {
     pathValidate,
@@ -59,7 +81,8 @@ module.exports = {
     isFile,
     readDir,    
     getExtFile,
-    readFile
+    // readFile,
+    getFiles
   };
 
 // if(isAnAbsolutePath('./files')){
