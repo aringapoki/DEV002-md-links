@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const axios = require('axios')
 
 //acá debería desarrollar las funciones, manejar condicionales y errores
 
@@ -14,6 +15,7 @@ const isAnAbsolutePath = (entryPath) => path.isAbsolute(entryPath);
 //función para hacer absoluta una ruta relativa
 const pathResolve = (entryPath) => path.resolve(entryPath)
 //console.log('pathResolve: ', pathResolve('./files'))
+
 const getAbsolutePath = (entryPath) => {
     if (isAnAbsolutePath(entryPath) == true) {
         return entryPath
@@ -53,8 +55,8 @@ const getFiles = (entryPath) => {
         if (isDirectory(absPath) == true) {
             const files = readDir(absPath)
             files.forEach(file => {                
-                if(getExtFile(file) == '.md')
-                arrayFiles.push(getAbsolutePath(file))
+                if(getExtFile(file) == '.md')                
+                arrayFiles.push(path.join(absPath, file))
             });
         }
         else if (isFile(absPath) == true) {
@@ -67,6 +69,39 @@ const getFiles = (entryPath) => {
         return arrayFiles
     }
 }
+
+const getArrayLinks = (file) => {
+    const regExp = /\[([^\[]+)\](\(.*\))/gm;
+    const singleMatchRegex = /\[([^\[]+)\]\((.*)\)/;
+    const absPath = path.resolve(file)
+    const content = fs.readFileSync(file, 'utf8').toString()
+    const getLinks = content.match(regExp);
+
+    if (getLinks !== null) {
+        const normalizedArray = getLinks.map((element) => {
+            const elementFound = singleMatchRegex.exec(element);
+            const [full, text, link] = elementFound;
+            return {
+              text: text,
+              link: link,
+              file: absPath
+            };
+          });
+        return normalizedArray
+    };
+}
+
+httpRequest = (url) => {axios.get(url).then(resp => {
+    const arrayLinks = []
+    arrayLinks.push({
+        status: resp.status,
+        ok: resp.statusText
+    })    
+    console.log(arrayLinks)
+});
+}
+
+
 
 // const getMds = (arrayFiles) => {
 //     arrayFiles.forEach(file => {
@@ -92,7 +127,8 @@ module.exports = {
     readDir,
     getExtFile,
     // readFile,
-    getFiles
+    getFiles,
+    getArrayLinks
 };
 
 // if(isAnAbsolutePath('./files')){
