@@ -91,16 +91,17 @@ const getArrayLinks = (file) => {
     };
 }
 
-httpRequest = (url) => {axios.get(url).then(resp => {
-    const arrayLinks = []
-    arrayLinks.push({
-        status: resp.status,
-        ok: resp.statusText
-    })    
-    console.log(arrayLinks)
-});
-}
+// const httpRequest = (url) => {axios.get(url).then(resp => {
+//     const arrayLinks = []
+//     arrayLinks.push({
+//         status: resp.status,
+//         ok: resp.statusText
+//     })    
+//     console.log(arrayLinks)
+// });
+// }
 
+const httpRequest = (url) => axios.get(url)
 
 
 // const getMds = (arrayFiles) => {
@@ -128,7 +129,8 @@ module.exports = {
     getExtFile,
     // readFile,
     getFiles,
-    getArrayLinks
+    getArrayLinks,
+    httpRequest
 };
 
 // if(isAnAbsolutePath('./files')){

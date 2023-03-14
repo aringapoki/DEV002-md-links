@@ -1,33 +1,41 @@
-const { getFiles, getArrayLinks } = require("./functions/utils");
+const { getFiles, getArrayLinks, httpRequest } = require("./functions/utils");
 
 const mdLinks = (entryPath, options) => {
 
-  const arrayFiles = getFiles(entryPath);
+    const arrayFiles = getFiles(entryPath);
+    const arrayLinks = []
 
-  if (arrayFiles) {    
-    arrayFiles.forEach(file => {
-      const arrayLinks = getArrayLinks(file)
-      console.log('array links: ', arrayLinks)
-    });
-  }
+    // if (arrayFiles) {
+    //     arrayFiles.forEach(file => {
+    //         const links = getArrayLinks(file)
+    //         arrayLinks.push(links)
+    //     });
+    // }
 
+    //console.log('array links: ', arrayLinks)
 
-  // return new Promise((resolve, reject)=>{    
-  //   // if (pathExists(entryPath) === false){
-  //   //   reject('not a valid path')      
-  //   // }
-  //   // else if (isAbsolute(entryPath) == true){
-  //   //   return entryPath
-  //   // }
-  //   // else if (isAbsolute(entryPath) == false) {
-  //   //   const absPath = relativeToAbs(entryPath)
-  //   //   return absPath
-  //   // }
-  //   //identificar si la ruta existe
-  //   //si no existe la ruta, rechaza la promesa
-  //   //reject con mensaje de "la ruta no existe"
-  //   resolve(arrayLinks)
-  // })
+    return new Promise((resolve, reject)=>{    
+        if(arrayFiles.length === 0){
+            reject('empty')
+        }
+
+        arrayFiles.forEach(file => {
+            const links = getArrayLinks(file)
+            arrayLinks.push(links)
+        })
+        const promisesArray = arrayLinks.map(element => {                        
+            return httpRequest(element.link)
+        })        
+        console.log(promisesArray)
+        const linksArray = []
+        Promise.all(promisesArray).then(res => {
+            return res.forEach(element => {
+                console.log(element)
+            })
+        })        
+
+      //resolve(httpRequest('http://webcode.me'))
+    })
 }
 
 // const testMdLinks = mdLinks('./DEV002-md-links/files/first-file.md');
@@ -35,5 +43,5 @@ const mdLinks = (entryPath, options) => {
 
 mdLinks('./files')
 module.exports = {
-  mdLinks
+    mdLinks
 };
