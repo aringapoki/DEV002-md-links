@@ -1,4 +1,6 @@
 const { pathValidate, isAnAbsolutePath, pathResolve, getAbsolutePath, isDirectory, isFile, readDir, getExtFile, getFiles } = require("../functions/utils");
+const { getArrayLinks } = require('../practice_mat/regEx.js')
+
 
 const mdLinks = (entryPath, options) => {
     //crear promesa que retorna la función mdLinks
@@ -6,18 +8,22 @@ const mdLinks = (entryPath, options) => {
     const isAbsolute = isAnAbsolutePath(entryPath);
     const relativeToAbs = pathResolve(entryPath);
     const isADirectory = isDirectory(entryPath);
-    const readDirectory = readDir(entryPath)
+    //const readDirectory = readDir(entryPath)
     const isAFile = isFile(entryPath);
     const isMd = getExtFile(entryPath);
     //const readMdFile = readFile(entryPath);
     const getAbsPath = getAbsolutePath(entryPath);
 
     const arrayFiles = getFiles(entryPath);
+    
     if(arrayFiles){
-    console.log('arrayFiles: ', arrayFiles)    
-    // arrayFiles.forEach(file => {
-        
-    // });    
+    console.log('arrayFiles: ', arrayFiles)   
+    //const linksArray = [] 
+    arrayFiles.forEach(file => {
+        console.log('funciona')
+        // linksArray.push(getArrayLinks(file))
+        // console.log('linksArray: ', linksArray)
+    });    
     }
 
     
@@ -56,8 +62,8 @@ const mdLinks = (entryPath, options) => {
     // })
 }
 
-console.log(mdLinks('./files'));
-//mdLinks('./files/first-file.md')
+//mdLinks('./files/first-file.md');
+mdLinks('./files')
 // const testMdLinks = mdLinks('./DEV002-md-links/files/first-file.md');
 // testMdLinks.then((result)=>{console.log(result)}).catch((error)=>{console.log(error)});
 

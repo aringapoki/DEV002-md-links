@@ -15,7 +15,7 @@ const isAnAbsolutePath = (entryPath) => path.isAbsolute(entryPath);
 const pathResolve = (entryPath) => path.resolve(entryPath)
 //console.log('pathResolve: ', pathResolve('./files'))
 const getAbsolutePath = (entryPath) => {
-    if(isAnAbsolutePath(entryPath) == true){
+    if (isAnAbsolutePath(entryPath) == true) {
         return entryPath
     } else {
         return pathResolve(entryPath)
@@ -50,12 +50,16 @@ const getFiles = (entryPath) => {
         const absPath = getAbsolutePath(entryPath);
         const arrayFiles = []
 
-        if (isDirectory(absPath) == true) {            
-            arrayFiles.push(readDir(absPath))
+        if (isDirectory(absPath) == true) {
+            const files = readDir(absPath)
+            files.forEach(file => {                
+                if(getExtFile(file) == '.md')
+                arrayFiles.push(getAbsolutePath(file))
+            });
         }
         else if (isFile(absPath) == true) {
             if(getExtFile(absPath) === '.md')
-            arrayFiles.push(path.basename(absPath));
+            arrayFiles.push(absPath);
         }
         else {
             return console.log('error')
@@ -63,6 +67,12 @@ const getFiles = (entryPath) => {
         return arrayFiles
     }
 }
+
+// const getMds = (arrayFiles) => {
+//     arrayFiles.forEach(file => {
+    
+//     })
+// }
 
 
 // función para leer el contenido del archivo
@@ -79,11 +89,11 @@ module.exports = {
     pathResolve,
     isDirectory,
     isFile,
-    readDir,    
+    readDir,
     getExtFile,
     // readFile,
     getFiles
-  };
+};
 
 // if(isAnAbsolutePath('./files')){
 //     console.log('es un path absoluto')

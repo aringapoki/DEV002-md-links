@@ -24,17 +24,18 @@ const fs = require('fs')
 // }
 
 // console.log('getting links: ', gettingLinks(fileRoute))
-
+//const getArrayLinks = (file) => {
 const regExp = /\[([^\[]+)\](\(.*\))/gm;
 //const regExp = /^\[([\w\s\d]+)\]\((https?:\/\/[\w\d./?=#]+)\)$/gm
 const file = path.resolve('./files/first-file.md')
+console.log('file: ', file)
 const content = fs.readFileSync(file, 'utf8').toString()
 // console.log({content})
 const getLinks = content.match(regExp);
-const arrayContent = [];
+//const arrayContent = [];
 const linksArray = []
 
-if (getLinks !== null){        
+if (getLinks !== null) {
     getLinks.forEach(element => {
         const links = element.split(']')
         //console.log(element)
@@ -48,10 +49,10 @@ if (getLinks !== null){
         // return arrayContent        
     });
     // console.log('array content:', arrayContent)
-    console.log(linksArray)  
-    
-};
+    console.log('links array: ', linksArray)
 
+};
+//}
 // const markdownText = 'Este es un [enlace](https://www.ejemplo.com) en un archivo Markdown.';
 
 // const regex = /\[(.*?)\]\((.*?)\)/g;
@@ -60,6 +61,32 @@ if (getLinks !== null){
 // while (match = regex.exec(markdownText)) {
 //   const linkText = match[1];
 //   const linkUrl = match[2];
-  
+
 //   console.log(`Encontrado enlace: ${linkText} -> ${linkUrl}`);
 // }
+
+// const gettingLinks = (file) => {
+//     const regExp = /\[([^\[]+)\](\(.*\))/gm;
+//     const filePath = path.resolve(file)
+//     const content = fs.readFileSync(filePath, 'utf8').toString()
+//     const getLinks = content.match(regExp)
+//     const linksArray = []
+
+//     if (getLinks !== null) {
+//         getLinks.forEach(element => {
+//             const links = element.split(']')
+//             linksArray.push({
+//                 href: links[1],
+//                 text: links[0]
+//             })
+//         })
+//         console.log(linksArray)
+//     }
+//     return linksArray
+// }
+
+// gettingLinks('first-file.md')
+
+module.exports = {
+    //getArrayLinks
+}
