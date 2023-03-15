@@ -22,8 +22,8 @@ const mdLinks = (entryPath, options) => {
                 return httpRequest(element.link)
             })
             //concatenar
-            //almacenar las promesas que se están creando con Promise.all -> juntar ambas respuestas
-            //console.log(promisesArray)
+            //almacenar las promesas que se están creando con Promise.all -> juntar ambas
+            console.log(promisesArray)
             Promise.all(promisesArray).then(res => {
                 return res.forEach((element, i) => {
                     console.log({

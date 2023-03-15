@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const axios = require('axios');
-const { rejects } = require('assert');
+// const { rejects } = require('assert');
 
 //acá debería desarrollar las funciones, manejar condicionales y errores
 
