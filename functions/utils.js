@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const axios = require('axios')
+const axios = require('axios');
+const { rejects } = require('assert');
 
 //acá debería desarrollar las funciones, manejar condicionales y errores
 
@@ -71,24 +72,29 @@ const getFiles = (entryPath) => {
 }
 
 const getArrayLinks = (file) => {
-    const regExp = /\[([^\[]+)\](\(.*\))/gm;
-    const singleMatchRegex = /\[([^\[]+)\]\((.*)\)/;
-    const absPath = path.resolve(file)
-    const content = fs.readFileSync(file, 'utf8').toString()
-    const getLinks = content.match(regExp);
+    return new Promise((resolve, rejects)=> {
+        const regExp = /\[([^\[]+)\](\(.*\))/gm;
+        const singleMatchRegex = /\[([^\[]+)\]\((.*)\)/;
+        const absPath = path.resolve(file)
+        const content = fs.readFileSync(file, 'utf8').toString()
+        const getLinks = content.match(regExp);
 
-    if (getLinks !== null) {
-        const normalizedArray = getLinks.map((element) => {
-            const elementFound = singleMatchRegex.exec(element);
-            const [full, text, link] = elementFound;
-            return {
-              text: text,
-              link: link,
-              file: absPath
-            };
-          });
-        return normalizedArray
-    };
+        if (getLinks !== null) {
+            const normalizedArray = getLinks.map((element) => {
+                const elementFound = singleMatchRegex.exec(element);
+                const [full, text, link] = elementFound;
+                return {
+                text: text,
+                link: link,
+                file: absPath
+                };
+            });
+            resolve(normalizedArray)
+        }else{
+            rejects("Hubo un error")
+        };
+    })
+    
 }
 
 // const httpRequest = (url) => {axios.get(url).then(resp => {

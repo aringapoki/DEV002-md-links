@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { httpRequest } = require('./utils')
+//const { httpRequest } = require('./utils')
 
 
 
@@ -13,7 +13,7 @@ const { httpRequest } = require('./utils')
 // });
 // }
 
-const httpRequest = (url) => axios.get(url)
-// const httpRequest = (url) => axios.get(url).then(resp => resp )
+//const httpRequest = (url) => axios.get(url)
+const httpRequest = (url) => axios.get(url).then(resp => resp )
 
-httpRequest('http://webcode.me')
+console.log(httpRequest('http://webcode.me'))
