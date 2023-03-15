@@ -3,13 +3,26 @@ const process = require('process');
 // console.log(process.argv)
 
 const entryPath = process.argv[2]
-console.log(entryPath)
+console.log('entry path', entryPath)
 
-if(process.argv[3] === '--options'){
-    console.log('acá debería devolver el array de promesas con options')
-} else if (process.argv[4] === '--validate'){
-    console.log('acá debería devolver el array de promesas con validate')
-}
+if(entryPath === undefined){
+    console.log('reject(ingresa path)')
+}else {
+    if(!process.argv[3] && !process[4]){
+        console.log('aca debería devolver array de promesas sin request de axios')
+    }
+    if(process.argv[3] === '--options' && !process.argv[4] === '--validate'){
+        console.log('acá debería devolver el array de promesas con options')
+    }
+    if (process.argv[4] === '--validate' && !process.argv[3] === '--options'){
+        console.log('acá debería devolver el array de promesas con validate')
+    } 
+    if (process.argv[3] === '--options' && process.argv[4] === '--validate'){
+        console.log('array con options y validate')
+    }
+} 
+
+
 
 
 // process.argv.forEach((val, index) => {
