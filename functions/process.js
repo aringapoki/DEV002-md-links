@@ -2,6 +2,9 @@ const process = require('process');
 
 // console.log(process.argv)
 
+const entryPath = process.argv[2]
+console.log(entryPath)
+
 if(process.argv[3] === '--options'){
     console.log('acá debería devolver el array de promesas con options')
 } else if (process.argv[4] === '--validate'){
