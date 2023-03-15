@@ -1,42 +1,51 @@
-const { getFiles, getArrayLinks, httpRequest } = require("./functions/utils");
+const { getFiles, getArrayLinks, httpRequest, pathValidate } = require("./functions/utils");
+const { results } = require('./cli')
 
 const mdLinks = (entryPath, options) => {
 
-    const arrayFiles = getFiles(entryPath);
+    //const entryPath = process.argv[2]
+    //console.log('entry path', entryPath)    
+    const existsPath = pathValidate(entryPath)
+    // console.log(existsPath)
     const arrayLinks = []
 
-
     return new Promise((resolve, reject) => {
-        if (arrayFiles.length === 0) {
-            reject('empty')
+
+        if (existsPath === false) {
+            console.log('el path ingresado no es válido')
         }
+        else {
+            const arrayFiles = getFiles(entryPath);
+            if (arrayFiles.length === 0) {
+                console.log('empty')
+            } else {
+                const arrayFilesPromises = arrayFiles.map((element) => getArrayLinks(element))
+                //console.log(arrayFilesPromises)
 
-        const arrayFilesPromises = arrayFiles.map((element) => getArrayLinks(element))
-        //console.log(arrayFilesPromises)
-        Promise.all(arrayFilesPromises).then(response => {
-            response.forEach(element => {
-                //console.log(element)
-                arrayLinks.push(...element)
-            })
-            const promisesArray = arrayLinks.map(element => {
-                return httpRequest(element.link)
-            })
-            //concatenar
-            //almacenar las promesas que se están creando con Promise.all -> juntar ambas
-            console.log(promisesArray)
-            Promise.all(promisesArray).then(res => {
-                return res.forEach((element, i) => {
-                    console.log({
-                        statusCode: element.status,
-                        statusText: element.statusText,
-                        link: element.request.res.responseUrl
+                Promise.all(arrayFilesPromises).then(response => {
+                    response.forEach(element => {
+                        //console.log(element)
+                        arrayLinks.push(...element)
                     })
+                    const promisesArray = arrayLinks.map(element => {
+                        return httpRequest(element.link)
+                    })
+                    //concatenar
+                    //almacenar las promesas que se están creando con Promise.all -> juntar ambas
+                    console.log(promisesArray)
+                    Promise.all(promisesArray).then(res => {
+                        return res.forEach((element, i) => {
+                            console.log({
+                                statusCode: element.status,
+                                statusText: element.statusText,
+                                link: element.request.res.responseUrl
+                            })
+                        })
+                    })
+                    console.log(arrayLinks)
                 })
-            })
-            console.log(arrayLinks)
-        })
-
-
+            }
+        }
         //resolve(httpRequest('http://webcode.me'))
     })
 }
@@ -44,7 +53,7 @@ const mdLinks = (entryPath, options) => {
 // const testMdLinks = mdLinks('./DEV002-md-links/files/first-file.md');
 // testMdLinks.then((result)=>{console.log(result)}).catch((error)=>{console.log(error)});
 
-mdLinks('./files')
+//mdLinks('./functions')
 module.exports = {
     mdLinks
 };

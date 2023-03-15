@@ -47,32 +47,29 @@ const readDir = (entryPath) => fs.readdirSync(entryPath, 'utf8')
 //console.log('readDir: ', readDir('./files') )
 
 const getFiles = (entryPath) => {
-    if (pathValidate(entryPath) == false) {
-        return console.log('not a valid path')
-    } else {
-        const absPath = getAbsolutePath(entryPath);
-        const arrayFiles = []
+    const absPath = getAbsolutePath(entryPath);
+    const arrayFiles = []
 
-        if (isDirectory(absPath) == true) {
-            const files = readDir(absPath)
-            files.forEach(file => {                
-                if(getExtFile(file) == '.md')                
+    if (isDirectory(absPath) == true) {
+        const files = readDir(absPath)
+        files.forEach(file => {
+            if (getExtFile(file) == '.md')
                 arrayFiles.push(path.join(absPath, file))
-            });
-        }
-        else if (isFile(absPath) == true) {
-            if(getExtFile(absPath) === '.md')
-            arrayFiles.push(absPath);
-        }
-        else {
-            return console.log('error')
-        }
-        return arrayFiles
+        });
     }
+    else if (isFile(absPath) == true) {
+        if (getExtFile(absPath) === '.md')
+            arrayFiles.push(absPath);
+    }
+    else {
+        return console.log('error')
+    }
+    return arrayFiles
 }
 
+
 const getArrayLinks = (file) => {
-    return new Promise((resolve, rejects)=> {
+    return new Promise((resolve, rejects) => {
         const regExp = /\[([^\[]+)\](\(.*\))/gm;
         const singleMatchRegex = /\[([^\[]+)\]\((.*)\)/;
         const absPath = path.resolve(file)
@@ -84,17 +81,17 @@ const getArrayLinks = (file) => {
                 const elementFound = singleMatchRegex.exec(element);
                 const [full, text, link] = elementFound;
                 return {
-                text: text,
-                link: link,
-                file: absPath
+                    text: text,
+                    link: link,
+                    file: absPath
                 };
             });
             resolve(normalizedArray)
-        }else{
+        } else {
             rejects("Hubo un error")
         };
     })
-    
+
 }
 
 // const httpRequest = (url) => {axios.get(url).then(resp => {
@@ -112,7 +109,7 @@ const httpRequest = (url) => axios.get(url)
 
 // const getMds = (arrayFiles) => {
 //     arrayFiles.forEach(file => {
-    
+
 //     })
 // }
 
