@@ -82,22 +82,25 @@ const httpRequest = (url) => axios.get(url)
 const getStats = (linksArray, withValidate = false) => {
     let stats = {
         "total": linksArray.length,
-        "Unique": 0
+        "Unique": 0,
+        "Broken": 0        
     };
     
     const unique = linksArray.reduce((unique, element) => (unique.includes(element.link) ? unique : [...unique, element.link]), []);
+    const broken = linksArray.filter(element => element.statusCode.includes('400') || element.statusCode.includes('500'));
     stats["Unique"] = unique.length;
     //console.log(unique)
-    return stats
-    // if(withValidate){
-    //     //función que incluye request
-    // }else{
-    //     return stats
-    // }
+    //return stats
+    if(withValidate){
+        stats["Broken"] = broken.length
+        return stats
+    }else{
+        return stats
+    }
 }
 
-//  const linksArray = [{link: '2'}, {link: '4'}, {link : '5'}, {link: '2'}]
-// console.log(getStats(linksArray))
+// const linksArray = [{statusCode: '400', link: 'abc'}, {statusCode: '500', link: 'abc'}, {statusCode : '200', link: 'zzzz'}, {statusCode: '200', link: 'ssss'}]
+// console.log(getStats(linksArray, true))
 
 // const unique = linksArray.reduce(
 //     (link, unique) => (link.includes(unique) ? link : [...link, unique]), [])
