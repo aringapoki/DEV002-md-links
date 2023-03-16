@@ -80,8 +80,11 @@ const getArrayLinks = (file) => {
 const httpRequest = (url) => axios.get(url)
 
 const getStats = (validateLinksArray) => {
-    const unique = validateLinksArray.filter((item, index) => (data.indexOf(item) === index));
-    console.log(unique)
+    const total = []
+    validateLinksArray.forEach(link =>{
+        total.push(link)
+        return total
+    })
 }
 
 module.exports = {
