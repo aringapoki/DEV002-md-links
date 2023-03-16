@@ -1,21 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 const axios = require('axios');
-// const { rejects } = require('assert');
 
-//acá debería desarrollar las funciones, manejar condicionales y errores
-
-//función para validar que existe el path, devuelve true o false
 const pathValidate = (entryPath) => fs.existsSync(entryPath)
-//console.log('pathValidate: ', pathValidate('./files'))
 
-//función para saber si la ruta es absoluta, devuelve true o false
 const isAnAbsolutePath = (entryPath) => path.isAbsolute(entryPath);
-//console.log('isAnAbsolutePath: ', isAnAbsolutePath('./files'))
 
-//función para hacer absoluta una ruta relativa
 const pathResolve = (entryPath) => path.resolve(entryPath)
-//console.log('pathResolve: ', pathResolve('./files'))
 
 const getAbsolutePath = (entryPath) => {
     if (isAnAbsolutePath(entryPath) == true) {
@@ -24,27 +15,20 @@ const getAbsolutePath = (entryPath) => {
         return pathResolve(entryPath)
     }
 }
-//función para saber si es un directorio, devuelve true o false
+
 const isDirectory = (entryPath) => {
     const stats = fs.statSync(entryPath);
     return stats.isDirectory()
 }
-//console.log('isDirectory: ', isDirectory('./files/first-file.md'))
 
-//función para saber si es un archivo, devuelve true o false
 const isFile = (entryPath) => {
     const stats = fs.statSync(entryPath);
     return stats.isFile()
 }
-//console.log('isFile: ', isFile('./files/first-file.md'))
 
-//función para obtener la extensión
 const getExtFile = (entryPath) => path.extname(entryPath)
-//console.log('getExtFile: ', getExtFile('./files/first-file.md'))
 
-//función para leer un directorio, devuelve un array de archivos
 const readDir = (entryPath) => fs.readdirSync(entryPath, 'utf8')
-//console.log('readDir: ', readDir('./files') )
 
 const getFiles = (entryPath) => {
     const absPath = getAbsolutePath(entryPath);
@@ -66,7 +50,6 @@ const getFiles = (entryPath) => {
     }
     return arrayFiles
 }
-
 
 const getArrayLinks = (file) => {
     return new Promise((resolve, rejects) => {
@@ -94,52 +77,17 @@ const getArrayLinks = (file) => {
 
 }
 
-// const httpRequest = (url) => {axios.get(url).then(resp => {
-//     const arrayLinks = []
-//     arrayLinks.push({
-//         status: resp.status,
-//         ok: resp.statusText
-//     })    
-//     console.log(arrayLinks)
-// });
-// }
-
 const httpRequest = (url) => axios.get(url)
 
-
-// const getMds = (arrayFiles) => {
-//     arrayFiles.forEach(file => {
-
-//     })
-// }
-
-
-// función para leer el contenido del archivo
-//const readFile = (entryPath) => fs.readFile(entryPath, 'utf8', (err, data) => {
-//     if(err) throw err;
-// //     console.log('contenido archivo readFile: ', data)
-// })
-//console.log('readFile: ', readFile('./files/first-file.md'));
+const getStats = (validateLinksArray) => {
+    const unique = validateLinksArray.filter((item, index) => (data.indexOf(item) === index));
+    console.log(unique)
+}
 
 module.exports = {
-    pathValidate,
-    isAnAbsolutePath,
-    getAbsolutePath,
-    pathResolve,
-    isDirectory,
-    isFile,
-    readDir,
-    getExtFile,
-    // readFile,
+    pathValidate,    
     getFiles,
     getArrayLinks,
-    httpRequest
+    httpRequest,
+    getStats
 };
-
-// if(isAnAbsolutePath('./files')){
-//     console.log('es un path absoluto')
-// }
-// else {
-//     pathResolve('./files')
-//     console.log('es un path relativo')
-// }

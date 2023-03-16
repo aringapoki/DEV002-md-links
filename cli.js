@@ -9,22 +9,25 @@ const entryPath = process.argv[2]
 if (entryPath === undefined) {
     throw new Error('ingresa un path')
 } else {
-    if (!process.argv[3] && !process[4]) {
+    console.log(process.argv)
+    if (!process.argv[3] && !process.argv[4]) {
         console.log('aca debería devolver array de promesas sin request de axios')
-        mdLinks(entryPath)
+        mdLinks(entryPath).then(resp=>console.log(resp))
     }
-    if (process.argv[3] === '--options' && !process.argv[4]) {
-        console.log('acá debería devolver el array de promesas con options')
+    else if (process.argv[3] === '--stats' && !process.argv[4]) {
+        console.log('acá debería devolver el array de promesas con stats')
+        mdLinks(entryPath, true, false ).then(resp=>console.log(resp))
     }
-    if (process.argv[3] === '--validate' && !process.argv[4]) {
+    else if (process.argv[3] === '--validate' && !process.argv[4]) {
         console.log('acá debería devolver el array de promesas con validate')
+        mdLinks(entryPath, false, true ).then(resp=>console.log(resp))        
     }
-    if (process.argv[3] === '--options' && process.argv[4] === '--validate' || process.argv[4] === '--options' && process.argv[3] === '--validate') {
-        console.log('array con options y validate')
+    else if (process.argv[3] === '--stats' && process.argv[4] === '--validate' || process.argv[4] === '--stats' && process.argv[3] === '--validate') {
+        console.log('array con stats y validate')
     }
-    if ((process.argv[3] !== '--options' && process.argv[3] !== '--validate') || (process.argv[4] !== '--options' && process.argv[4] !== '--validate')) {
-        console.log('reject(algún parámetro no es válido)')
-    }
+    // if ((process.argv[3] !== '--options' && process.argv[3] !== '--validate') || (process.argv[4] !== '--options' && process.argv[4] !== '--validate')) {
+    //     console.log('reject(algún parámetro no es válido)')
+    // }
     //falta agregar si algún parámetro no es válido
 }
 
