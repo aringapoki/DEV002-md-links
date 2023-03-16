@@ -1,6 +1,6 @@
 const { getFiles, getArrayLinks, httpRequest, pathValidate, getStats } = require("./functions/utils");
 
-const mdLinks = (entryPath, showStats = false, shouldValidate = false) => {
+const mdLinks = (entryPath, firstOpt = false, secondOpt = false) => {
    const existsPath = pathValidate(entryPath)
    const arrayLinks = []
 
@@ -21,8 +21,7 @@ const mdLinks = (entryPath, showStats = false, shouldValidate = false) => {
                   arrayLinks.push(...element)
                })
                
-               if (shouldValidate) {                  
-                  
+               if (shouldValidate) {                                    
                   const promisesArray = arrayLinks.map(element => {
                      return httpRequest(element.link)
                   })
@@ -44,6 +43,7 @@ const mdLinks = (entryPath, showStats = false, shouldValidate = false) => {
                   })
 
                } else {
+                  //este resolve es para opt1 y opt2 false
                   resolve(arrayLinks)
                }
 

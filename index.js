@@ -1,39 +1,56 @@
-const { getFiles, getArrayLinks } = require("./functions/utils");
+const { getFiles, getArrayLinks, httpRequest, pathValidate, getStats } = require("./functions/utils");
 
-const mdLinks = (entryPath, options) => {
+const mdLinks = (entryPath, firstOpt = false, secondOpt = false) => {
+  const existsPath = pathValidate(entryPath)
+  const arrayLinks = []
 
-  const arrayFiles = getFiles(entryPath);
+  return new Promise((resolve, reject) => {
 
-  if (arrayFiles) {    
-    arrayFiles.forEach(file => {
-      const arrayLinks = getArrayLinks(file)
-      console.log('array links: ', arrayLinks)
-    });
-  }
+    const arrayFiles = getFiles(entryPath);
+    
+    if (arrayFiles.length === 0) {
+      throw new Error('no se encontraron archivos md')
+    } else {
+      const arrayFilesPromises = arrayFiles.map((element) => getArrayLinks(element))
+      
+      //guardar este promise all en una variable y ejecutar después dentro de if(shoulValidate/showStats)
+      Promise.all(arrayFilesPromises).then(response => {
+        response.forEach(element => {
+          arrayLinks.push(...element)
+        })
 
+        if (firstOpt || secondOpt) {
+          const promisesArray = arrayLinks.map(element => {
+            return httpRequest(element.link)
+          })
+          const validatedLinksArray = []
 
-  // return new Promise((resolve, reject)=>{    
-  //   // if (pathExists(entryPath) === false){
-  //   //   reject('not a valid path')      
-  //   // }
-  //   // else if (isAbsolute(entryPath) == true){
-  //   //   return entryPath
-  //   // }
-  //   // else if (isAbsolute(entryPath) == false) {
-  //   //   const absPath = relativeToAbs(entryPath)
-  //   //   return absPath
-  //   // }
-  //   //identificar si la ruta existe
-  //   //si no existe la ruta, rechaza la promesa
-  //   //reject con mensaje de "la ruta no existe"
-  //   resolve(arrayLinks)
-  // })
+          Promise.all(promisesArray).then(res => {
+            res.forEach((element, i) => {
+              validatedLinksArray.push({
+                ...arrayLinks[i],
+                statusCode: element.status,
+                statusText: element.statusText,
+                link: element.request.res.responseUrl
+              })
+            })
+            resolve(getStats(validatedLinksArray))
+            //resolve(validatedLinksArray)
+            // if (showStats) {
+            //    resolve(getStats(validatedLinksArray))
+            // }
+          })
+
+        } else {          
+          resolve(arrayLinks)
+        }
+
+      })
+    }
+
+  })
 }
 
-// const testMdLinks = mdLinks('./DEV002-md-links/files/first-file.md');
-// testMdLinks.then((result)=>{console.log(result)}).catch((error)=>{console.log(error)});
-
-mdLinks('./files')
 module.exports = {
   mdLinks
 };
