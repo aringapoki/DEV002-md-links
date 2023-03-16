@@ -87,7 +87,7 @@ const getStats = (linksArray, withValidate = false) => {
     };
     
     const unique = linksArray.reduce((unique, element) => (unique.includes(element.link) ? unique : [...unique, element.link]), []);
-    //const broken = linksArray.filter(element => element.statusCode.includes('400') || element.statusCode.includes('500'));
+    const broken = linksArray.filter(element => !element.statusText.includes('OK'));
     stats["Unique"] = unique.length;
     //console.log(unique)
     //return stats

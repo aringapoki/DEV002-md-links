@@ -34,7 +34,8 @@ const mdLinks = (entryPath, firstOpt = false, secondOpt = false) => {
                 link: element.request.res.responseUrl
               })
             })
-            resolve(getStats(validatedLinksArray))
+            //console.log('lin 37', validatedLinksArray)
+            resolve(getStats(validatedLinksArray, true))
             //resolve(validatedLinksArray)
             // if (showStats) {
             //    resolve(getStats(validatedLinksArray))
@@ -43,6 +44,7 @@ const mdLinks = (entryPath, firstOpt = false, secondOpt = false) => {
 
         } else {          
           resolve(arrayLinks)
+          //resolve(validatedLinksArray)
         }
 
       })
