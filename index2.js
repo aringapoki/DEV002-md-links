@@ -15,30 +15,32 @@ const mdLinks = (entryPath, showStats = false, shouldValidate = false) => {
          } else {
             const arrayFilesPromises = arrayFiles.map((element) => getArrayLinks(element))
 
+            //guardar este promise all en una variable y ejecutar después dentro de if(shoulValidate/showStats)
             Promise.all(arrayFilesPromises).then(response => {
                response.forEach(element => {
                   arrayLinks.push(...element)
                })
-
-               if (shouldValidate) {
-                  const validatedLinksArray = []
+               
+               if (shouldValidate) {                  
+                  
                   const promisesArray = arrayLinks.map(element => {
                      return httpRequest(element.link)
                   })
+                  const validatedLinksArray = []
 
-                  Promise.all(promisesArray).then(res => {
-                     return res.forEach((element, i) => {
+                  Promise.all(promisesArray).then(res => {                     
+                     res.forEach((element, i) => {
                         validatedLinksArray.push({
                            ...arrayLinks[i],
                            statusCode: element.status,
                            statusText: element.statusText,
                            link: element.request.res.responseUrl
                         })
-                        resolve(validatedLinksArray)
-                        if(showStats){
-
-                        }
                      })
+                     return validatedLinksArray
+                     // if (showStats) {
+                     //    resolve(getStats(validatedLinksArray))
+                     // }
                   })
 
                } else {

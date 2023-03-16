@@ -79,16 +79,32 @@ const getArrayLinks = (file) => {
 
 const httpRequest = (url) => axios.get(url)
 
-const getStats = (validateLinksArray) => {
-    const total = []
-    validateLinksArray.forEach(link =>{
-        total.push(link)
-        return total
-    })
+const getStats = (linksArray, withValidate = false) => {
+    let stats = {
+        "total": linksArray.length,
+        "Unique": 0
+    };
+    
+    const unique = linksArray.reduce((unique, element) => (unique.includes(element.link) ? unique : [...unique, element.link]), []);
+    stats["Unique"] = unique.length;
+    //console.log(unique)
+    return stats
+    // if(withValidate){
+    //     //función que incluye request
+    // }else{
+    //     return stats
+    // }
 }
 
+//  const linksArray = [{link: '2'}, {link: '4'}, {link : '5'}, {link: '2'}]
+// console.log(getStats(linksArray))
+
+// const unique = linksArray.reduce(
+//     (link, unique) => (link.includes(unique) ? link : [...link, unique]), [])
+// return unique
+
 module.exports = {
-    pathValidate,    
+    pathValidate,
     getFiles,
     getArrayLinks,
     httpRequest,

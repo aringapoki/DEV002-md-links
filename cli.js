@@ -24,6 +24,7 @@ if (entryPath === undefined) {
     }
     else if (process.argv[3] === '--stats' && process.argv[4] === '--validate' || process.argv[4] === '--stats' && process.argv[3] === '--validate') {
         console.log('array con stats y validate')
+        mdLinks(entryPath, true, true ).then(resp=>console.log(resp))    
     }
     // if ((process.argv[3] !== '--options' && process.argv[3] !== '--validate') || (process.argv[4] !== '--options' && process.argv[4] !== '--validate')) {
     //     console.log('reject(algún parámetro no es válido)')
