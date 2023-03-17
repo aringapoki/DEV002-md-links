@@ -1,58 +1,89 @@
-const { getFiles, getArrayLinks, httpRequest, pathValidate, getStats } = require("./functions/utils");
+const {
+  getFiles,
+  getArrayLinks,
+  httpRequest,
+  getStats,
+} = require("./functions/utils");
+const process = require("process");
 
-const mdLinks = (entryPath, firstOpt = false, secondOpt = false) => {
-  const existsPath = pathValidate(entryPath)
-  const arrayLinks = []
+const firstOptStr = process.argv[3];
+const secondOptStr = process.argv[4];
+
+const mdLinks = (entryPath, firstOpt = undefined, secondOpt = undefined) => {
+  const arrayLinks = [];
 
   return new Promise((resolve, reject) => {
-
     const arrayFiles = getFiles(entryPath);
-    
+
     if (arrayFiles.length === 0) {
-      throw new Error('no se encontraron archivos md')
+      throw new Error("no se encontraron archivos md");
     } else {
-      const arrayFilesPromises = arrayFiles.map((element) => getArrayLinks(element))
-      
-      //guardar este promise all en una variable y ejecutar después dentro de if(shoulValidate/showStats)
-      Promise.all(arrayFilesPromises).then(response => {
-        response.forEach(element => {
-          arrayLinks.push(...element)
-        })
+      const arrayFilesPromises = arrayFiles.map((element) =>
+        getArrayLinks(element)
+      );
 
-        if (firstOpt || secondOpt) {
-          const promisesArray = arrayLinks.map(element => {
-            return httpRequest(element.link)
-          })
-          const validatedLinksArray = []
+      Promise.all(arrayFilesPromises).then((response) => {
+        response.forEach((element) => {
+          arrayLinks.push(...element);
+        });
 
-          Promise.all(promisesArray).then(res => {
-            res.forEach((element, i) => {
-              validatedLinksArray.push({
-                ...arrayLinks[i],
-                statusCode: element.status,
-                statusText: element.statusText,
-                link: element.request.res.responseUrl
-              })
-            })
-            //console.log('lin 37', validatedLinksArray)
-            resolve(getStats(validatedLinksArray, true))
-            //resolve(validatedLinksArray)
-            // if (showStats) {
-            //    resolve(getStats(validatedLinksArray))
-            // }
-          })
+        const promisesArray = arrayLinks.map((element) => {
+          return httpRequest(element.link);
+        });
 
-        } else {          
-          resolve(arrayLinks)
-          //resolve(validatedLinksArray)
+        //console.log('promises array: ', promisesArray)
+        
+          const validatedLinksArray = [];
+
+
+
+          if (firstOpt === "--validate" && !secondOpt) {
+            Promise.all(promisesArray).then((res) => {
+              res.forEach((element, i) => {
+                  validatedLinksArray.push({
+                  ...arrayLinks[i],
+                  statusCode: element.status,
+                  statusText: element.statusText,
+                  link: element.request.res.responseUrl,
+                });
+              });
+              resolve(validatedLinksArray)
+            });
+            
+          } else if (firstOpt === "--stats" && !secondOpt) {
+            Promise.all(promisesArray).then((res) => {
+              res.forEach((element, i) => {
+                  validatedLinksArray.push({
+                  ...arrayLinks[i],
+                  statusCode: element.status,
+                  statusText: element.statusText,
+                  link: element.request.res.responseUrl,
+                });
+              });
+              resolve(getStats(validatedLinksArray))
+            });
+            
+          } else if (firstOpt === "--validate" && secondOpt === "--stats") {
+            Promise.all(promisesArray).then((res) => {
+              res.forEach((element, i) => {
+                  validatedLinksArray.push({
+                  ...arrayLinks[i],
+                  statusCode: element.status,
+                  statusText: element.statusText,
+                  link: element.request.res.responseUrl,
+                });
+              });
+              resolve(getStats(validatedLinksArray, true));
+            });            
+          }
+         else {
+          resolve(arrayLinks);
         }
-
-      })
+      });
     }
-
-  })
-}
+  });
+};
 
 module.exports = {
-  mdLinks
+  mdLinks,
 };

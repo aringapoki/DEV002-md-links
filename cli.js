@@ -17,15 +17,15 @@ if (entryPath === undefined || pathValidate(entryPath) === false) {
     }
     else if (firstOpt === '--stats' && !secondOpt) {
         console.log('acá debería devolver el array de promesas con stats')
-        mdLinks(entryPath, true, false ).then(resp=>console.log(resp))
+        mdLinks(entryPath, '--stats', undefined ).then(resp=>console.log(resp))
     }
     else if (firstOpt === '--validate' && !secondOpt) {
         console.log('acá debería devolver el array de promesas con validate')
-        mdLinks(entryPath, true, false ).then(resp=>console.log(resp))        
+        mdLinks(entryPath, '--validate', undefined ).then(resp=>console.log(resp))        
     }
     else if (firstOpt === '--stats' && secondOpt === '--validate' || firstOpt === '--validate' && secondOpt === '--stats') {
         console.log('array con stats y validate')
-        mdLinks(entryPath, true, true ).then(resp=>console.log(resp))    
+        mdLinks(entryPath, '--validate', '--stats' ).then(resp=>console.log(resp))    
     }
     else if ((firstOpt !== '--options' && firstOpt !== '--validate') || (secondOpt !== '--options' && secondOpt !== '--validate')) {
         console.log('algún parámetro no es válido)')

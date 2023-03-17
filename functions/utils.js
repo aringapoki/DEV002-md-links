@@ -84,14 +84,12 @@ const getStats = (linksArray, withValidate = false) => {
         "total": linksArray.length,
         "Unique": 0,
         "Broken": 0        
-    };
-    
+    };    
     const unique = linksArray.reduce((unique, element) => (unique.includes(element.link) ? unique : [...unique, element.link]), []);
-    const broken = linksArray.filter(element => !element.statusText.includes('OK'));
     stats["Unique"] = unique.length;
-    //console.log(unique)
-    //return stats
+
     if(withValidate){
+        const broken = linksArray.filter(element => !element.statusText.includes('OK'));
         stats["Broken"] = broken.length
         return stats
     }else{
